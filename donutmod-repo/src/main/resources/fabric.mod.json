@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "donutmod",
+  "version": "${version}",
+  "name": "DonutMod",
+  "description": "DonutSMP tarzı para, shard ve istatistik sistemi.",
+  "authors": ["TheXyro0"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.thexyro.donutmod.DonutMod"]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
