@@ -15,12 +15,27 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 9.8.2
+
+      # Proje hangi klasörde olursa olsun (en yüzeydeki settings.gradle) otomatik bulur.
+      - name: Proje klasörünü bul
+        id: find
+        run: |
+          S=$(find . -name settings.gradle -not -path './.git/*' | awk '{ print length($0) " " $0 }' | sort -n | head -1 | cut -d' ' -f2-)
+          if [ -z "$S" ]; then echo "settings.gradle bulunamadı!"; exit 1; fi
+          DIR=$(dirname "$S")
+          LIBS="$DIR/build/libs"
+          LIBS="${LIBS#./}"
+          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
+          echo "libs=$LIBS" >> "$GITHUB_OUTPUT"
+          echo "Proje klasörü: $DIR"
+
       - name: Build
-        working-directory: donutmod-repo/donutmod
+        working-directory: ${{ steps.find.outputs.dir }}
         run: gradle build --no-daemon
+
       - uses: actions/upload-artifact@v4
         with:
           name: donutmod-jar
           path: |
-            donutmod-repo/donutmod/build/libs/*.jar
-            !donutmod-repo/donutmod/build/libs/*-sources.jar
+            ${{ steps.find.outputs.libs }}/*.jar
+            !${{ steps.find.outputs.libs }}/*-sources.jar
