@@ -52,6 +52,18 @@ public final class DonutCommands {
                                 .then(Commands.argument("adet", IntegerArgumentType.integer(1))
                                         .executes(c -> giftItem(c, IntegerArgumentType.getInteger(c, "adet")))))));
 
+        // /shop  ve  /sell
+        d.register(Commands.literal("shop")
+                .executes(c -> {
+                    DonutShop.openMain(c.getSource().getPlayerOrException());
+                    return 1;
+                }));
+        d.register(Commands.literal("sell")
+                .executes(c -> {
+                    DonutShop.openSell(c.getSource().getPlayerOrException());
+                    return 1;
+                }));
+
         d.register(adminTree());
     }
 
@@ -242,7 +254,7 @@ public final class DonutCommands {
     }
 
     /** Eşyayı envantere koyar; sığmayan kısım yere düşer. Yere düştüyse true. */
-    private static boolean giveItem(ServerPlayer target, ItemStack stack) {
+    static boolean giveItem(ServerPlayer target, ItemStack stack) {
         target.getInventory().add(stack);
         if (!stack.isEmpty()) {
             target.drop(stack, false);

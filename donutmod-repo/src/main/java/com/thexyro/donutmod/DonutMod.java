@@ -17,6 +17,7 @@ public class DonutMod implements ModInitializer {
 
     private static DonutConfig config;
     private static DataStore store;
+    private static ShopConfig shop;
 
     private static int tickCounter = 0;
     private static int saveCounter = 0;
@@ -29,13 +30,19 @@ public class DonutMod implements ModInitializer {
         return store;
     }
 
+    public static ShopConfig shop() {
+        return shop;
+    }
+
     public static void reloadConfig() {
         config = DonutConfig.load();
+        shop = ShopConfig.load();
     }
 
     @Override
     public void onInitialize() {
         config = DonutConfig.load();
+        shop = ShopConfig.load();
         store = new DataStore(DonutConfig.dir().resolve("players.json"));
         store.load();
 

@@ -122,6 +122,26 @@ public class DataStore {
         return next;
     }
 
+    /** Market alışverişi: bakiye yeterliyse düşer. Önce bedel alınır, eşya sonra verilir. */
+    public synchronized boolean spend(UUID id, String name, Stat stat, long amount) {
+        PlayerData d = get(id, name);
+        if (amount < 0 || stat.get(d) < amount) {
+            return false;
+        }
+        stat.set(d, stat.get(d) - amount);
+        dirty = true;
+        save();
+        return true;
+    }
+
+    /** Satış geliri vb. */
+    public synchronized void earn(UUID id, String name, Stat stat, long amount) {
+        PlayerData d = get(id, name);
+        stat.set(d, Math.min(MAX, stat.get(d) + Math.max(0, amount)));
+        dirty = true;
+        save();
+    }
+
     /** /pay: önce göndericiden al, sonra alıcıya ver. */
     public synchronized boolean transfer(UUID from, String fromName, UUID to, String toName, long amount) {
         PlayerData a = get(from, fromName);
