@@ -16,11 +16,10 @@ jobs:
         with:
           gradle-version: 9.8.2
       - name: Build
-        working-directory: donutmod
         run: gradle build --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: donutmod-jar
           path: |
-            donutmod/build/libs/*.jar
-            !donutmod/build/libs/*-sources.jar
+            build/libs/*.jar
+            !build/libs/*-sources.jar
